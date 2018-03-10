@@ -9,7 +9,7 @@ Path Travel Analysis (PTA)
     $ python3 -m venv venv
     $ source venv/bin/activate
 
-    (venv) $ pip install requirement.txt
+    (venv) $ pip install --upgrade -r requirements.txt
     or
     (venv) $ pip install numpy pandas scikit-learn scipy matplotlib networkx
 
