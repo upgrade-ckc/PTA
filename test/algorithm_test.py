@@ -1,4 +1,4 @@
-from representative_group_and_medianoid.ERGM_algorithm import *
+from ERGM_algorithm import *
 
 # Default value
 filename = "sample_2.CSV"
