@@ -9,12 +9,12 @@ Demo of Shortest path algorithm
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# edges.txt is csv file.
+# sample_dijkstra_data.txt is csv file.
 # edges.txt의 형식은 출발지,도착지,weight 로 정의하였습니다. 마지막 네번째 column은 도로명으로 정했는데 여기서는 사용하지 않았습니다.
-FILE_NAME = "edges.txt"
+FILE_NAME = "sample_dijkstra_data.txt"
 GRAPH_TYPE = nx.Graph() # if you want to treat a directed graph -> use nx.Digraph()
 
-# edges.txt 파일을 불러와 graph를 생성합니다
+# sample_dijkstra_data.txt 파일을 불러와 graph를 생성합니다
 G = nx.read_edgelist(FILE_NAME, create_using=GRAPH_TYPE, delimiter=",", nodetype=str, data=[("weight", int), ("attr", str)])
 G.edges(data=True)
 
