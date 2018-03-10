@@ -122,7 +122,17 @@ def determine_optimal_k(density_list):
 
 def ERGM(filename, target):
     original_dataset = load_data(filename)
+
+    ''' Test field '''
+    # x가 0~24 까지 Hour field 를 filtering 해줌
+    for x in [2, 3]:
+        test_dataset = original_dataset[original_dataset['Hour'] == x]
+        print(test_dataset)
+        # original_dataset = test_datasets
+    ''' End test'''
+
     sorted_dataset = original_dataset.sort_values(by=[target])
+
 
     # find optimal k
     k = test(sorted_dataset, target)
@@ -132,9 +142,9 @@ def ERGM(filename, target):
     import matplotlib.pyplot as plt
 
     # 원본 data
-    plt.plot(original_dataset[target], original_dataset['Hour'], 'o', markersize=3)
+    plt.plot(original_dataset['Hour'], original_dataset[target], 'o', markersize=3)
     # 정리 data
-    plt.plot(final_data[target].values, final_data['Hour'], 'o', color="orange", markersize=0.8)
+    plt.plot(final_data['Hour'], final_data[target].values, 'o', color="orange", markersize=0.8)
     # label_name
     plt.xlabel(target)
     plt.ylabel('Hour')
