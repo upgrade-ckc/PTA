@@ -13,7 +13,7 @@ BETA = 0.05
 def cal_var(df, t):
     min = df[t].min()
     max = df[t].max()
-    median = (min+max)/2
+    median = df[t].median()
     return min, max, median
 
 
@@ -38,6 +38,7 @@ def test(df, t):
 
 def loop(df, t):
     min, max, median, initial_density, threshold, density_list = set_initial_values(df, t)
+    cnt = 0
     print("Calculating ...")
     while True:
         cnt_l = sum(df[t] < median)
@@ -59,16 +60,18 @@ def loop(df, t):
         # calculate density
         density = df[t].count() / (max - min)
         density_list.append(abs(initial_density - density))
-
+        cnt = cnt + 1
         print("min: ", min, "median: ", median, "max: ", max)
         min, max, median = cal_var(df, t)
 
         if (median - min) < threshold:
             print("median-min: ", median-min, "threshold", threshold)
+            print("total loop count: ", cnt)
             print("Threshold breaking!\n")
             break
         elif (max - median) < threshold:
             print("max-median: ", median-min, "threshold", threshold)
+            print("Loop count: ", cnt)
             print("Threshold breaking!\n")
             break
 
@@ -125,29 +128,31 @@ def ERGM(filename, target):
 
     ''' Test field '''
     # x가 0~24 까지 Hour field 를 filtering 해줌
-    for x in [2, 3]:
+    for x in [2]:
         test_dataset = original_dataset[original_dataset['Hour'] == x]
-        print(test_dataset)
         # original_dataset = test_datasets
     ''' End test'''
 
-    sorted_dataset = original_dataset.sort_values(by=[target])
-
+    # sorted_dataset = original_dataset.sort_values(by=[target])
+    sorted_dataset = test_dataset.sort_values(by=[target])
 
     # find optimal k
     k = test(sorted_dataset, target)
     final_data = main_loop(sorted_dataset, target, k)
-    print(final_data)
+
+    # target_data: 마지막에 graph로 뿌려줄 data // loop로 final_data append
+    target_data = pd.DataFrame()
+    target_data = target_data.append(final_data)
 
     import matplotlib.pyplot as plt
 
     # 원본 data
     plt.plot(original_dataset['Hour'], original_dataset[target], 'o', markersize=3)
     # 정리 data
-    plt.plot(final_data['Hour'], final_data[target].values, 'o', color="orange", markersize=0.8)
+    plt.plot(target_data['Hour'], target_data[target].values, 'o', color="orange", markersize=0.8)
     # label_name
-    plt.xlabel(target)
-    plt.ylabel('Hour')
+    plt.xlabel('Hour')
+    plt.ylabel(target)
     plt.show()
 
 
