@@ -125,41 +125,28 @@ def determine_optimal_k(density_list):
 
 def ERGM(filename, target):
     original_dataset = load_data(filename)
-
-
-    ''' Original data 정리 '''
-
-
-
-    ''' End '''
-
-
-    ''' Test field '''
-    # x가 0~24 까지 Hour field 를 filtering 해줌
-    for x in [2]:
-        test_dataset = original_dataset[original_dataset['hour'] == x]
-        # original_dataset = test_datasets
-    ''' End test'''
-
-    # sorted_dataset = original_dataset.sort_values(by=[target])
-    sorted_dataset = test_dataset.sort_values(by=[target])
-
-    # find optimal k
-    k = test(sorted_dataset, target)
-    final_data = main_loop(sorted_dataset, target, k)
-
-    # target_data: 마지막에 graph로 뿌려줄 data // loop로 final_data append
     target_data = pd.DataFrame()
-    target_data = target_data.append(final_data)
+
+    # x가 0~24 까지 Hour field 를 filtering 해줌
+    for x in range(24):
+        selected_dataset = original_dataset[original_dataset['HOUR'] == x]
+        sorted_dataset = selected_dataset.sort_values(by=[target])
+
+        # find optimal k
+        k = test(sorted_dataset, target)
+        final_data = main_loop(sorted_dataset, target, k)
+
+        # target_data: 마지막에 graph로 뿌려줄 data // loop로 final_data append
+        target_data = target_data.append(final_data)
 
     import matplotlib.pyplot as plt
 
     # 원본 data
-    plt.plot(original_dataset['hour'], original_dataset[target], 'o', markersize=3)
+    plt.plot(original_dataset['HOUR'], original_dataset[target], 'o', markersize=3)
     # 정리 data
-    plt.plot(target_data['hour'], target_data[target].values, 'o', color="orange", markersize=0.8)
+    plt.plot(target_data['HOUR'], target_data[target].values, 'o', color="orange", markersize=0.8)
     # label_name
-    plt.xlabel('hour')
+    plt.xlabel('HOUR')
     plt.ylabel(target)
     plt.show()
 
